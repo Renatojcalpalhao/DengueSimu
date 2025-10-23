@@ -4,7 +4,7 @@ global {
     // ============================
     // 🔹 Leitura de dados climáticos reais
     // ============================
-    file clima_csv <- file("../data/csv/clima_santo_amaro.csv");
+    file clima_csv <- file("../Data/csv/clima_santo_amaro.csv");
     table clima_dados <- read_csv(clima_csv);
 
     // Variáveis de clima (valores iniciais)
@@ -55,8 +55,13 @@ global {
               + "°C | Umidade: " + umidade + "%"
               + " | Chuva: " + precipitacao + "mm";
     }
-}
-
+    
+    // Atualiza métricas agregadas para os monitores/gráficos do experimento
+    reflex atualizar_metricas {
+        total_infectados_h <- count(humanos where (each.infectado));
+        total_recuperados <- count(humanos where (each.recuperado));
+        // r0_instantaneo pode ser estimado posteriormente com eventos de novas infecções/dia
+    }
 }
 
 // ================= ESPÉCIES =================
