@@ -66,7 +66,7 @@ experiment santo_amaro_simulacao type: gui {
     }
     
     loop {
-        do global.atualizar_dados_externos;
+        do global.atualizar_clima;
         do global.atualizar_metricas;
         wait 1.0;
     }

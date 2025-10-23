@@ -42,7 +42,7 @@ df["temperatura_media"] = df[["temperatura_max", "temperatura_min"]].mean(axis=1
 df = df[["data", "temperatura_media", "umidade", "chuva"]]
 
 # 📁 Caminho para salvar o CSV
-output_dir = os.path.join("..", "data", "csv")
+output_dir = os.path.join("..", "Data", "csv")
 os.makedirs(output_dir, exist_ok=True)
 output_path = os.path.join(output_dir, "clima_santo_amaro.csv")
 
