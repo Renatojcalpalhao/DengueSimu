@@ -6,7 +6,7 @@ import os
 
 # Caminhos dos arquivos
 csv_path = "../Data/csv/clima_santo_amaro.csv"
-json_path = "../Data/dengue_data.json"
+json_path = "../Data/dengue_data2.json"
 output_dir = "../Data/graficos"
 
 # Cria a pasta de saída, se não existir

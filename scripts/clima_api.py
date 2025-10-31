@@ -1,52 +1,37 @@
 import requests
 import pandas as pd
-from datetime import datetime, timedelta
+import datetime
 import os
 
-# 📍 Coordenadas de Santo Amaro, São Paulo
-LAT = -23.652
-LON = -46.713
+OUTPUT_PATH = os.path.join("..", "Data", "csv", "clima_sao_paulo.csv")
 
-# 🗓️ Definir intervalo (últimos 7 dias até hoje)
-end_date = datetime.now().date()
-start_date = end_date - timedelta(days=7)
+def coletar_clima(cidade="Sao Paulo", dias=20):
+    base_url = "https://api.open-meteo.com/v1/forecast"
+    params = {
+        "latitude": -23.55,  # São Paulo
+        "longitude": -46.63,
+        "daily": "temperature_2m_max,temperature_2m_min,precipitation_sum",
+        "timezone": "America/Sao_Paulo",
+    }
 
-# 🌦️ API da Open-Meteo (sem necessidade de chave)
-url = (
-    f"https://api.open-meteo.com/v1/forecast?"
-    f"latitude={LAT}&longitude={LON}"
-    f"&start_date={start_date}&end_date={end_date}"
-    f"&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,relative_humidity_2m_max"
-    f"&timezone=America/Sao_Paulo"
-)
+    resposta = requests.get(base_url, params=params)
+    dados = resposta.json()
+    datas = dados["daily"]["time"]
+    max_t = dados["daily"]["temperature_2m_max"]
+    min_t = dados["daily"]["temperature_2m_min"]
+    chuva = dados["daily"]["precipitation_sum"]
 
-print("🔄 Coletando dados do clima de Santo Amaro...")
-response = requests.get(url)
-data = response.json()
+    df = pd.DataFrame({
+        "dia": range(1, len(datas) + 1),
+        "data": datas,
+        "temp_max": max_t,
+        "temp_min": min_t,
+        "chuva_mm": chuva
+    })
 
-if "daily" not in data:
-    print("❌ Erro ao buscar dados da API.")
-    exit()
+    df = df.head(dias)
+    df.to_csv(OUTPUT_PATH, index=False)
+    print(f"✅ Arquivo salvo em: {OUTPUT_PATH}")
 
-# 📊 Converter dados em DataFrame
-df = pd.DataFrame({
-    "data": data["daily"]["time"],
-    "temperatura_max": data["daily"]["temperature_2m_max"],
-    "temperatura_min": data["daily"]["temperature_2m_min"],
-    "umidade": data["daily"]["relative_humidity_2m_max"],
-    "chuva": data["daily"]["precipitation_sum"]
-})
-
-# 🧮 Calcular temperatura média
-df["temperatura_media"] = df[["temperatura_max", "temperatura_min"]].mean(axis=1)
-df = df[["data", "temperatura_media", "umidade", "chuva"]]
-
-# 📁 Caminho para salvar o CSV
-output_dir = os.path.join("..", "data", "csv")
-os.makedirs(output_dir, exist_ok=True)
-output_path = os.path.join(output_dir, "clima_santo_amaro.csv")
-
-# 💾 Salvar arquivo CSV
-df.to_csv(output_path, index=False, encoding="utf-8")
-print(f"✅ Dados salvos em: {output_path}")
-print(df)
+if __name__ == "__main__":
+    coletar_clima()

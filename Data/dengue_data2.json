@@ -1,0 +1,32 @@
+[
+    {
+        "dia": 1,
+        "casos": 10,
+        "agua_parada": 5,
+        "chuva": 20
+    },
+    {
+        "dia": 2,
+        "casos": 15,
+        "agua_parada": 8,
+        "chuva": 10
+    },
+    {
+        "dia": 3,
+        "casos": 25,
+        "agua_parada": 10,
+        "chuva": 30
+    },
+    {
+        "dia": 4,
+        "casos": 30,
+        "agua_parada": 12,
+        "chuva": 25
+    },
+    {
+        "dia": 5,
+        "casos": 28,
+        "agua_parada": 9,
+        "chuva": 5
+    }
+]
